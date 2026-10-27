@@ -1,24 +1,56 @@
-# UNINASSAU Recife — redesign institucional
+# UNINASSAU Recife — redesign institucional (v2)
 
-Projeto front-end em HTML, CSS e JavaScript puros (sem bibliotecas). Para abrir, basta abrir o `index.html` no navegador (ou usar o Live Server no VS Code).
+Site estático em HTML, CSS e JavaScript puros, sem bibliotecas e sem etapa de build.
+Projeto acadêmico demonstrativo: **não é o site oficial da UNINASSAU.**
+
+## Como abrir
+
+- Mais simples: abra `index.html` no navegador.
+- Recomendado (para testar tudo como em produção): sirva a pasta com um servidor local, por exemplo
+  `python3 -m http.server 8000` e acesse `http://localhost:8000`, ou use o **Live Server** do VS Code.
+
+## Como publicar
+
+Qualquer hospedagem estática serve (GitHub Pages, Netlify, Vercel, Hostinger):
+envie a pasta inteira mantendo a estrutura. `404.html` já é reconhecido por GitHub Pages e Netlify.
 
 ## Estrutura
-- `index.html` — estrutura semântica de todas as seções
-- `styles.css` — design system (tokens no `:root`), componentes e responsividade
-- `script.js` — header, mega menu, menu mobile, buscador/filtros, modal de curso, abas de ingresso, mapa, count-up, accordion e animações
-- `data.js` — **base de cursos e listas de filtros. Edite aqui para incluir ou atualizar cursos.**
 
-## Onde inserir dados oficiais
+```
+index.html            Início
+cursos.html           Catálogo com busca e filtros (?q=&area=&grau=&modalidade=&turno=&unidade=)
+curso.html            Página de cada curso (curso.html?id=psicologia)
+ingresso.html         Formas de ingresso, passo a passo, PROUNI/FIES, dúvidas
+unidades.html         Endereços, mapa sob demanda e cursos por unidade
+institucional.html    Por que estudar, vida universitária, pós-graduação, números
+atendimento.html      Canais e todas as dúvidas frequentes
+acessibilidade.html   Recursos, atalhos e limitações
+404.html              Página não encontrada
+assets/css/styles.css Design system (tokens, temas, componentes, responsivo)
+assets/js/data.js     >>> BASE DE DADOS: cursos, unidades, números <<<
+assets/js/app.js      Todas as páginas: ajustes de leitura, menu, redirecionamentos
+assets/js/home.js     Destaques e contagem por área na página inicial
+assets/js/catalog.js  Busca e filtros do catálogo
+assets/js/course.js   Monta a página do curso
+assets/js/units.js    Mapa e cursos por unidade
+assets/js/institutional.js  Seção de números (só aparece com dado oficial)
+assets/img/           Fotos em WebP + JPG (640, 960 e 1600 px)
+```
+
+## Como editar
+
 | O quê | Onde |
 |---|---|
-| Cursos, modalidade, turno, unidade | `data.js` → `COURSES` (arrays vazios = "Consultar oferta") |
-| Números institucionais | `index.html`, seção `.numbers` → preencha `data-count` (o count-up é automático) |
-| Foto do hero | `index.html` → `.hero-photo` (há um comentário com o `<img>` pronto) |
-| Fotos da vida universitária | `index.html` → substitua cada `.photo-placeholder` por `<img>` |
+| Incluir/alterar curso | `assets/js/data.js` → `COURSES`. A página `curso.html?id=<id>` passa a existir sozinha. |
+| Modalidade, turno, unidade | Mesmo objeto. Deixe `[]` quando não confirmado: aparece "Oferta a confirmar". |
+| Graduações em destaque | `destaque: true` no curso. |
+| Números institucionais | `data.js` → `NUMEROS[].valor`. A seção aparece em `institucional.html` quando houver valor. |
+| Endereços | `data.js` → `UNIDADES_INFO` **e** o HTML de `index.html`/`unidades.html` (o texto está no HTML para funcionar sem JavaScript). |
+| Telefone, rodapé, menu | O cabeçalho e o rodapé se repetem em todas as páginas: altere em todos os arquivos `.html` (use "Substituir em arquivos" do editor). |
+| Trocar foto | Substitua os arquivos em `assets/img/` mantendo os nomes (ver mapa no RELATORIO.md). |
 
-## Regras de conteúdo
-Não foram inseridos mensalidades, bolsas, descontos, notas do MEC, duração, estatísticas, datas ou endereços novos. Endereços, telefone e links vieram do projeto original.
-A modalidade, o turno e a unidade de Enfermagem, Biomedicina, Sistemas de Informação, Direito e Psicologia vieram de listagens públicas consultadas em out/2026 e **devem ser confirmados** em https://vest.uninassau.edu.br/ antes de publicar.
+## Observações
 
-## Observação
-Projeto demonstrativo/conceitual, não é o site oficial publicado pela UNINASSAU.
+- Sem JavaScript o site continua navegável: menus viram lista, a busca envia o formulário e o catálogo mostra todos os cursos (o filtro instantâneo precisa de JavaScript).
+- Logotipo, favicon e fontes são carregados de servidores externos (logo.uninassau.edu.br e Google Fonts). Se o logotipo não carregar, aparece o nome "UNINASSAU" em texto.
+- O mapa do Google só é carregado quando a pessoa clica em "Carregar mapa" ou "Ver no mapa".
